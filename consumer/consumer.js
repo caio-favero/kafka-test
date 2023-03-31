@@ -18,7 +18,7 @@ Promise.resolve(consumer.connect())
     .then(() => {
         consumer.run({
             eachMessage: async ({ topic, partition, message }) => {
-                console.log(message.value.toString())
+                // console.log(message.value.toString())
             },
         })
     })

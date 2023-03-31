@@ -1,20 +1,25 @@
 const { Kafka } = require('kafkajs')
+const { Types } = require('mongoose')
+
 
 const kafka = new Kafka({
-    clientId: 'my-app',
+    clientId: clientId,
     brokers: ['localhost:9092'],
 })
 
-const producer = kafka.producer({
-    transactionalId: require('uuidv4').uuid(),
-    maxInFlightRequests: 1,
-    idempotent: true,
-})
-
 const sendWithStream = async () => {
-    await producer.connect()
-
     for (i = 1; i <= 10; i++) {
+        const { v4: uuidv4 } = require('uuid')
+        const transactionalId = uuidv4()
+
+        const producer = kafka.producer({
+            transactionalId: transactionalId,
+            maxInFlightRequests: 1,
+            idempotent: true,
+        })
+
+        await producer.connect()
+
         const message = `with ${i} ${transactionalId}`
         const messages = [{ value: JSON.stringify(message) }]
 
