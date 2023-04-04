@@ -1,5 +1,6 @@
 const { Kafka } = require("kafkajs");
 const topic = "test-topic";
+const mongoose = require('../mongoose')
 
 const kafka = new Kafka({
   clientId: "my-app",
@@ -14,7 +15,9 @@ const createConsumer = async () => {
     await consumer.subscribe({ topic, fromBeginning: true })
     consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
-        console.log(topic, message.value.toString())
+
+        console.log(topic, JSON.parse(message.value).message)
+        await mongoose.received(JSON.parse(message.value).transactionalId)
       },
     })
   } catch (error) {

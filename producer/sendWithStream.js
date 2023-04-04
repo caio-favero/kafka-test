@@ -1,5 +1,6 @@
 const { Kafka } = require('kafkajs')
 const prod = 'Prod1'
+// const mongoose = require('../mongoose')
 
 const kafka = new Kafka({
   clientId: clientId,
@@ -19,7 +20,7 @@ const sendWithStream = async () => {
 
     await producer.connect()
 
-    const message = `${prod} with ${transactionalId}`
+    const message = { message: `${prod} with ${transactionalId}`, transactionalId }
     const messages = [{ value: JSON.stringify(message) }]
 
     const transaction = await producer.transaction()
@@ -27,6 +28,7 @@ const sendWithStream = async () => {
     try {
       await transaction.send({ topic, messages })
       await transaction.commit()
+      // await mongoose.create(transactionalId)
 
       console.log(prod, 'sendWithStream', transactionalId)
     } catch (err) {
