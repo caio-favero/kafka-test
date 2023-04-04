@@ -1,6 +1,6 @@
 const { Kafka } = require('kafkajs')
 const kafka = new Kafka({ brokers: ['localhost:9092'] })
-const prod = 'Prod1'
+const prod = 'Prod2'
 
 const sendWithoutStream = async () => {
   for (i = 1; i <= 10; i++) {

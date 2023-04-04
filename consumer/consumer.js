@@ -3,25 +3,23 @@ const topic = "test-topic";
 
 const kafka = new Kafka({
   clientId: "my-app",
-  brokers: ["localhost:8080"],
+  brokers: ["localhost:9092"],
 });
 
 const consumer = kafka.consumer({ groupId: "test-group" });
 
-Promise.resolve(consumer.connect())
-  .then(() => {
-    return consumer.subscribe({ topic, fromBeginning: true });
-  })
-  .then(() => {
-    consumer.subscribe({ topic, fromBeginning: true });
-  })
-  .then(() => {
+const createConsumer = async () => {
+  try {
+    await consumer.connect()
+    await consumer.subscribe({ topic, fromBeginning: true })
     consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
-        // console.log(message.value.toString())
+        console.log(topic, message.value.toString())
       },
-    });
-  })
-  .catch((e) => {
-    console.log("err", e);
-  });
+    })
+  } catch (error) {
+    console.log('error =>', err)
+  }
+}
+
+createConsumer()

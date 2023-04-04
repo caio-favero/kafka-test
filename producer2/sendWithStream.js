@@ -1,5 +1,5 @@
 const { Kafka } = require('kafkajs')
-const prod = 'Prod1'
+const prod = 'Prod2'
 
 const kafka = new Kafka({
   clientId: clientId,
