@@ -4,25 +4,24 @@ const prod = 'Prod1'
 const mongoose = require('../mongoose')
 
 const sendWithoutStream = async () => {
-  for (i = 1; i <= 10; i++) {
-    const { v4: uuidv4 } = require('uuid')
-    const transactionalId = uuidv4()
+  const { v4: uuidv4 } = require('uuid')
+  const transactionalId = uuidv4()
 
-    const producer = kafka.producer({
-      transactionalId,
-      maxInFlightRequests: 1,
-      idempotent: true,
-    })
+  const producer = kafka.producer({
+    transactionalId,
+    maxInFlightRequests: 1,
+    idempotent: true,
+  })
 
-    await producer.connect()
+  await producer.connect()
 
-    const message = { message: `${prod} without ${transactionalId}`, transactionalId }
-    const messages = [{ value: JSON.stringify(message) }]
-    await mongoose.create(transactionalId)
-    producer.send({ topic, messages })
+  const message = { message: `${prod} without ${transactionalId}`, transactionalId }
+  const messages = [{ value: JSON.stringify(message) }]
+  const response = await mongoose.create(transactionalId)
 
-    console.log(prod, 'sendWithoutStream', transactionalId)
-  }
+  producer.send({ topic, messages })
+
+  console.log(prod, 'sendWithoutStream', transactionalId)
 }
 
 module.exports = sendWithoutStream
