@@ -8,36 +8,34 @@ const kafka = new Kafka({
 })
 
 const sendWithStream = async () => {
-  for (i = 1; i <= 10; i++) {
-    const { v4: uuidv4 } = require('uuid')
-    const transactionalId = uuidv4()
+  const { v4: uuidv4 } = require('uuid')
+  const transactionalId = uuidv4()
 
-    const producer = kafka.producer({
-      transactionalId,
-      maxInFlightRequests: 1,
-      idempotent: true,
-    })
+  const producer = kafka.producer({
+    transactionalId,
+    maxInFlightRequests: 1,
+    idempotent: true,
+  })
 
-    await producer.connect()
+  await producer.connect()
 
-    const message = { message: `${prod} with ${transactionalId}`, transactionalId }
-    const messages = [{ value: JSON.stringify(message) }]
+  const message = { message: `${prod} with ${transactionalId}`, transactionalId }
+  const messages = [{ value: JSON.stringify(message) }]
 
-    const transaction = await producer.transaction()
+  const transaction = await producer.transaction()
 
-    try {
-      await transaction.send({ topic, messages })
-      await transaction.commit()
-      await mongoose.create(transactionalId)
+  try {
+    await transaction.send({ topic, messages })
+    await transaction.commit()
+    await mongoose.create(transactionalId)
 
-      console.log(prod, 'sendWithStream', transactionalId)
-    } catch (err) {
-      console.log('err1 ====> ', err)
-      await transaction.abort()
-    }
+    console.log(prod, 'sendWithStream', transactionalId)
+  } catch (err) {
+    console.log('err1 ====> ', err)
+    await transaction.abort()
   }
-  return
 
+  return
 }
 
 module.exports = sendWithStream

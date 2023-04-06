@@ -1,13 +1,13 @@
-const { Kafka } = require("kafkajs");
-const topic = "test-topic";
+const { Kafka } = require("kafkajs")
+const topic = "test-topic"
 const mongoose = require('../mongoose')
 
 const kafka = new Kafka({
-  clientId: "my-app",
+  clientId: 'Consumer1',
   brokers: ["localhost:9092"],
-});
+})
 
-const consumer = kafka.consumer({ groupId: "test-group" });
+const consumer = kafka.consumer({ groupId: "test-group" })
 
 const createConsumer = async () => {
   try {

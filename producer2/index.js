@@ -1,22 +1,23 @@
-const app = require('./config/express')();
-const port = app.get('port');
+const app = require('./config/express')()
+const port = app.get('port')
 
 global.topic = 'test-topic'
-global.clientId = 'my-app'
+global.clientId = 'Producer2'
 
 const sendWithStream = require('./sendWithStream')
 const sendWithoutStream = require('./sendWithoutStream')
-const interval = 10000
+const interval = 1000
 
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`)
-});
+})
 
 app.get('/with', (_, res) => {
   console.log('\n\n\n\n', 1, 'with')
   sendWithStream()
   res.sendStatus(201)
 })
+
 app.get('/without', (_, res) => {
   console.log('\n\n\n\n', 2, 'without')
   sendWithoutStream()
