@@ -1,5 +1,5 @@
 const { Kafka } = require("kafkajs")
-const topic = "test-topic"
+const topics = ["test-topic", "test-topic2"]
 const mongoose = require('../mongoose')
 
 const kafka = new Kafka({
@@ -12,11 +12,12 @@ const consumer = kafka.consumer({ groupId: "test-group2" })
 const createConsumer = async () => {
   try {
     await consumer.connect()
-    await consumer.subscribe({ topic, fromBeginning: true })
+    await consumer.subscribe({ topics, fromBeginning: true })
     consumer.run({
+      partitionsConsumedConcurrently: 3,
+      autoCommit: false,
       eachMessage: async ({ topic, partition, message }) => {
-
-        console.log(topic, JSON.parse(message.value).message)
+        console.log(topic, partition, JSON.parse(message.value).message)
         await mongoose.received(JSON.parse(message.value).transactionalId)
       },
     })

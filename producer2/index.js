@@ -1,7 +1,7 @@
 const app = require('./config/express')()
 const port = app.get('port')
 
-global.topic = 'test-topic'
+global.topic = 'test-topic2'
 global.clientId = 'Producer2'
 
 const sendWithStream = require('./sendWithStream')
