@@ -24,11 +24,11 @@ const createTopic = async (topic) => {
   return created
 }
 
-const createPartition = async (partition) => {
+const createPartition = async (topic) => {
   await admin.connect()
 
   const created = await admin.createPartitions({
-    topicPartitions: [partition],
+    topicPartitions: [{ topic, count: 3 }],
   })
 
   await admin.disconnect()

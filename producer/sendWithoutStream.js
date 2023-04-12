@@ -11,15 +11,6 @@ const sendWithoutStream = async () => {
   const t3 = uuidv4()
 
   const producer = kafka.producer({
-    createPartitioner: {
-      topic,
-      partitionMetadata: [
-        { partitionId: 1, leader: 1 },
-        { partitionId: 2, leader: 2 },
-        { partitionId: 0, leader: 0 }
-      ],
-      message: 'message'
-    },
     transactionalId,
     maxInFlightRequests: 1,
     idempotent: true,

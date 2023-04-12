@@ -25,3 +25,5 @@ module.exports = {
     return await Kitten.findByIdAndUpdate(_id, { received: true })
   }
 }
+
+// https://www.zabbix.com/download?zabbix=5.0&os_distribution=ubuntu&os_versi
