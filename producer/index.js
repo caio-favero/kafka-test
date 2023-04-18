@@ -61,7 +61,7 @@ app.get('/group', async (_, res) => {
 // POST
 app.post('/partition/:partition', async (req, res) => {
   try {
-    const response = await createPartition(topic)
+    const response = await createPartition(topic, req.params.partition)
     res.json(response)
   } catch (error) {
     res.status(400).send(error)
@@ -79,9 +79,9 @@ app.post('/topic/:topic', async (req, res) => {
 
 // Isso serve para testar um stream infinito de mensagens a serem enviadas para os tópicos a serem testados
 
-setInterval(() => {
-  sendWithStream()
-}, interval)
+// setInterval(() => {
+//   sendWithStream()
+// }, interval)
 setInterval(() => {
   sendWithoutStream()
 }, interval)

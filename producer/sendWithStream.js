@@ -4,7 +4,12 @@ const mongoose = require('../mongoose')
 
 const kafka = new Kafka({
   clientId: clientId,
-  brokers: ['localhost:9092'],
+  brokers: ['10.1.1.16:9092'],
+  sasl: {
+    mechanism: 'plain', // scram-sha-256 or scram-sha-512
+    username: 'kafka',
+    password: '@55Pbx#Klaus'
+  },
 })
 
 const sendWithStream = async () => {
