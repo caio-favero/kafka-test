@@ -1,7 +1,10 @@
 const { Kafka } = require('kafkajs')
-const kafka = new Kafka({ brokers: ['broker1:10.1.1.16:9092'] })
+const kafka = new Kafka({
+  clientId,
+  brokers: ['10.1.1.16:9092']
+})
 const prod = 'Prod1'
-const mongoose = require('../mongoose')
+// const mongoose = require('../mongoose')
 
 const sendWithoutStream = async () => {
   const { v4: uuidv4 } = require('uuid')
@@ -27,7 +30,7 @@ const sendWithoutStream = async () => {
     { partition: 1, value: JSON.stringify(message2) },
     { partition: 2, value: JSON.stringify(message3) }
   ]
-  const response = await mongoose.create(transactionalId)
+  // const response = await mongoose.create(transactionalId)
 
   producer.send({ topic, messages })
 
