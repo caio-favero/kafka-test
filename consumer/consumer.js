@@ -4,7 +4,7 @@ const topics = ["test-topic"];
 
 const kafka = new Kafka({
   clientId: "Consumer1",
-  brokers: ['10.1.1.16:9092']
+  brokers: ['10.1.1.16:9092', 'localhost:9092'],
 });
 
 const consumer = kafka.consumer({ groupId: "test-group1" });

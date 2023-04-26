@@ -9,7 +9,7 @@ const sendWithoutStream = require('./sendWithoutStream')
 const interval = 1000
 
 app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`)
+    console.log(`Servidor rodando na porta ${port}`)
 })
 
 app.use(require('./routes.js'))
@@ -17,10 +17,10 @@ app.use(require('./routes.js'))
 // Isso serve para testar um stream infinito de mensagens a serem enviadas para os tópicos a serem testados
 
 setInterval(() => {
-  console.log('\n')
-  sendWithStream()
+    console.log('\n')
+    sendWithStream()
 }, interval)
 setInterval(() => {
-  console.log('\n')
-  sendWithoutStream()
+    console.log('\n')
+    sendWithoutStream()
 }, interval)

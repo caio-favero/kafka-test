@@ -1,10 +1,22 @@
-const { Kafka } = require('kafkajs')
+const { Kafka, Partitioners } = require('kafkajs')
 const prod = 'Prod2'
 const mongoose = require('../mongoose')
+const fs = require('fs')
 
 const kafka = new Kafka({
   clientId: clientId,
-  brokers: ['localhost:9092'],
+  brokers: ['10.1.1.16:9092'],
+  ssl: {
+    rejectUnauthorized: false,
+    ca: [fs.readFileSync('./ca.crt', 'utf-8')],
+    key: fs.readFileSync('./client-key.pem', 'utf-8'),
+    cert: fs.readFileSync('./client-cert.pem', 'utf-8')
+  },
+  // sasl: {
+  //   mechanism: 'plain',
+  //   username: 'kafka',
+  //   password: '@55Pbx#Klaus'
+  // },
 })
 
 const sendWithStream = async () => {
@@ -12,7 +24,8 @@ const sendWithStream = async () => {
   const transactionalId = uuidv4()
 
   const producer = kafka.producer({
-    transactionalId,
+    createPartitioner: Partitioners.DefaultPartitioner,
+    // transactionalId,
     maxInFlightRequests: 1,
     idempotent: true,
   })
@@ -27,7 +40,7 @@ const sendWithStream = async () => {
   try {
     await transaction.send({ topic, messages })
     await transaction.commit()
-    await mongoose.create(transactionalId)
+    // await mongoose.create(transactionalId)
 
     console.log(prod, 'sendWithStream', transactionalId)
   } catch (err) {
