@@ -6,7 +6,7 @@ global.clientId = 'Producer1'
 
 const sendWithStream = require('./sendWithStream')
 const sendWithoutStream = require('./sendWithoutStream')
-const interval = 1000
+const interval = 5000
 
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`)
