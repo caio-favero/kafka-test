@@ -19,6 +19,7 @@ const sendWithoutStream = async () => {
   const messages = [{ value: JSON.stringify(message) }]
   // await mongoose.create(transactionalId)
   producer.send({ topic, messages })
+  await producer.disconnect()
 
   console.log(prod, 'sendWithoutStream', transactionalId)
 }

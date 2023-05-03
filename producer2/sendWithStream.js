@@ -40,6 +40,8 @@ const sendWithStream = async () => {
   try {
     await transaction.send({ topic, messages })
     await transaction.commit()
+    await producer.disconnect()
+
     // await mongoose.create(transactionalId)
 
     console.log(prod, 'sendWithStream', transactionalId)

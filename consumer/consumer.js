@@ -4,7 +4,10 @@ const topics = ["test-topic"];
 
 const kafka = new Kafka({
   clientId: "Consumer1",
-  brokers: ['10.1.1.16:9092', 'localhost:9092'],
+  brokers: [
+    // '10.1.1.16:9092',
+    'localhost:9092'
+  ],
 });
 
 const consumer = kafka.consumer({ groupId: "test-group1" });
@@ -21,29 +24,7 @@ const createConsumer = async () => {
         // await mongoose.received(JSON.parse(message.value).transactionalId);
       },
     });
-    consumer.commitOffsets([
-      {
-        topic: topics[0],
-        partition: 0,
-        offset: "31004",
-        high: "31004",
-        low: "421",
-      },
-      {
-        topic: topics[0],
-        partition: 1,
-        offset: "54312",
-        high: "54312",
-        low: "3102",
-      },
-      {
-        topic: topics[0],
-        partition: 2,
-        offset: "32103",
-        high: "32103",
-        low: "518",
-      },
-    ]);
+
   } catch (error) {
     console.log("error =>", error);
   }

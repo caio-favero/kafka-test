@@ -1,5 +1,5 @@
 const { Kafka } = require('kafkajs')
-const kafka = new Kafka({ brokers: ['10.1.1.16:9092'] })
+const kafka = new Kafka({ brokers: ['localhost:9092'] })
 const admin = kafka.admin()
 
 const listTopics = async () => {

@@ -2,8 +2,8 @@ const { Kafka } = require('kafkajs')
 const kafka = new Kafka({
   clientId,
   brokers: [
-    '10.1.1.16:9092',
-    // 'localhost:9092'
+    // '10.1.1.16:9092',
+    'localhost:9092'
   ],
 })
 const prod = 'Prod1'
@@ -36,6 +36,7 @@ const sendWithoutStream = async () => {
   // const response = await mongoose.create(transactionalId)
 
   producer.send({ topic, messages })
+  // await producer.disconnect()
 
   console.log(prod, 'sendWithoutStream', transactionalId)
 }
