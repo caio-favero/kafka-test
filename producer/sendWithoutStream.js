@@ -2,8 +2,8 @@ const { Kafka } = require('kafkajs')
 const kafka = new Kafka({
   clientId,
   brokers: [
-    // '10.1.1.16:9092',
-    'localhost:9092'
+    '10.1.1.16:9092',
+    // 'localhost:9092'
   ],
 })
 const prod = 'Prod1'

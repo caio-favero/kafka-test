@@ -2,6 +2,7 @@
 # ********************** Creates variables *****************************
 # **********************************************************************
 KAFKA_DIR="/home/caiofavero/to-install" # /home/kafka
+PROMETHEUS_DIR="/home/caiofavero/to-prometheus" # /home/prometheus
 DOWNLOAD_DIR="/home/caiofavero/to-download" # /home/tmp
 $SERVICE_PATH="/home/caiofavero" # /etc/systemd/system
 
@@ -11,6 +12,7 @@ $SERVICE_PATH="/home/caiofavero" # /etc/systemd/system
 # rm -rf $KAFKA_DIR
 mkdir -p $KAFKA_DIR
 mkdir -p $DOWNLOAD_DIR
+mkdir -p $PROMETHEUS_DIR
 
 # **********************************************************************
 # ************************ Download Kafka ******************************
@@ -18,6 +20,22 @@ mkdir -p $DOWNLOAD_DIR
 if [ ! -f $DOWNLOAD_DIR/kafka.tgz ]
 then
     wget -O $DOWNLOAD_DIR/kafka.tgz https://downloads.apache.org/kafka/3.4.0/kafka_2.13-3.4.0.tgz
+fi
+
+# **********************************************************************
+# ************************* Download JMX *******************************
+# **********************************************************************
+if [ ! -f $PROMETHEUS_DIR/jmx.jar ]
+then
+    wget -O $PROMETHEUS_DIR/jmx.jar https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.18.0/jmx_prometheus_javaagent-0.18.0.jar
+fi
+
+# **********************************************************************
+# ******************* Download JMX -> Kafka config *********************
+# **********************************************************************
+if [ ! -f $PROMETHEUS_DIR/kafka.yml ]
+then
+    wget -O $PROMETHEUS_DIR/kafka.yml https://raw.githubusercontent.com/prometheus/jmx_exporter/master/example_configs/kafka-0-8-2.yml
 fi
 
 # **********************************************************************
@@ -54,6 +72,7 @@ After=zookeeper.service
 [Service]
 Type=simple
 User=kafka
+Environment="KAFKA_OPTS=-javaagent:$PROMETHEUS_DIR/jmx.jar=8080:$PROMETHEUS_DIR/kafka.yaml"
 ExecStart=/bin/sh -c '$KAFKA_DIR/bin/kafka-server-start.sh $KAFKA_DIR/config/server.properties > $KAFKA_DIR/kafka.log 2>&1'
 ExecStop=$KAFKA_DIR/bin/kafka-server-stop.sh
 Restart=on-abnormal

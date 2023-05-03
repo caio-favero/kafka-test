@@ -5,8 +5,8 @@ const prod = 'Prod1'
 const kafka = new Kafka({
   clientId: clientId,
   brokers: [
-    // '10.1.1.16:9092',
-    'localhost:9092'
+    '10.1.1.16:9092',
+    // 'localhost:9092'
   ],
   // sasl: {
   //   mechanism: 'plain', // scram-sha-256 or scram-sha-512
