@@ -26,7 +26,7 @@ export default class KafkaProducer {
     this.producer = this.createProducer()
   }
 
-  setDefaultOptions(options?: iOptions) {
+  private setDefaultOptions(options?: iOptions) {
     this.options = {
       useStream: false,
       maxInFlightRequests: 1,
@@ -39,7 +39,7 @@ export default class KafkaProducer {
     this.options = { ...this.options, ...options }
   }
 
-  public async start(): Promise<void> {
+  private async start(): Promise<void> {
     try {
       await this.producer.connect()
     } catch (error) {
@@ -51,7 +51,7 @@ export default class KafkaProducer {
     await this.producer.disconnect()
   }
 
-  async sendMessage(topic: string, message: string, options?: iOptions) {
+  public async sendMessage(topic: string, message: string, options?: iOptions) {
     this.topic = topic
     this.message = message
 
@@ -63,7 +63,7 @@ export default class KafkaProducer {
     }
   }
 
-  async sendWithStream() {
+  private async sendWithStream() {
     await this.producer.connect()
     const transaction = await this.producer.transaction()
     const message = { message: [this.message] }
@@ -77,7 +77,7 @@ export default class KafkaProducer {
     }
   }
 
-  async sendWithoutStream() {
+  private async sendWithoutStream() {
     await this.producer.connect()
     const message = { message: [this.message] }
     const messages = [{ value: JSON.stringify(message) }]
