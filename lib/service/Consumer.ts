@@ -23,7 +23,7 @@ export default class KafkaConsumer {
     this.kafkaConsumer = this.createKafkaConsumer()
   }
 
-  public async startConsumer(): Promise<void> {
+  public async startConsumer(callback: Promise<void>): Promise<void> {
     const topic: ConsumerSubscribeTopics = {
       topics: this.topics,
       fromBeginning: this.options.fromBeginning
@@ -33,13 +33,7 @@ export default class KafkaConsumer {
       await this.kafkaConsumer.connect()
       await this.kafkaConsumer.subscribe(topic)
 
-      await this.kafkaConsumer.run({
-        eachMessage: async (messagePayload: EachMessagePayload) => {
-          const { topic, partition, message } = messagePayload
-          const prefix = `${topic}[${partition} | ${message.offset}] / ${message.timestamp}`
-          console.log(`- ${prefix} ${message.key}#${message.value}`)
-        }
-      })
+      await this.kafkaConsumer.run({ eachMessage: async (messagePayload: EachMessagePayload) => callback })
     } catch (error) {
       console.log('Error: ', error)
     }
