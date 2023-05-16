@@ -60,9 +60,12 @@ app.post('/partition/:partition', async (req, res) => {
 
 app.post('/topic/:topic', async (req, res) => {
   try {
+    console.log(0)
     const response = await createTopic(req.params.topic)
+    console.log(1, response)
     res.json(response)
   } catch (error) {
+    console.log(2, error)
     res.status(400).send(error)
   }
 })

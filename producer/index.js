@@ -16,11 +16,11 @@ app.use(require('./routes.js'))
 
 // Isso serve para testar um stream infinito de mensagens a serem enviadas para os tópicos a serem testados
 
-setInterval(() => {
-  console.log('\n')
-  sendWithStream()
-}, interval)
-setInterval(() => {
-  console.log('\n')
-  sendWithoutStream()
-}, interval)
+// setInterval(() => {
+//   console.log('\n')
+//   sendWithStream()
+// }, interval)
+// setInterval(() => {
+//   console.log('\n')
+//   sendWithoutStream()
+// }, interval)

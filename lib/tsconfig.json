@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "strict": true,
+    "target": "es2019",
+    "module": "commonjs",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": [
+      "node",
+      "jest",
+    ],
+    "esModuleInterop": true,
+    "inlineSourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useUnknownInCatchVariables": false,
+    "lib": [
+      "es2020"
+    ],
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules",
+    "**/__test__/*"
+  ]
+}

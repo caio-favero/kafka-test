@@ -14,11 +14,11 @@ const listTopics = async () => {
 
 const createTopic = async (topic) => {
   await admin.connect()
-
+  console.log(3, topic)
   const created = await admin.createTopics({
-    topics: [topic]
+    topics: [{ topic, numPartitions: 20 }]
   })
-
+  console.log(4)
   await admin.disconnect()
 
   return created
