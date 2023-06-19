@@ -1,0 +1,85 @@
+version: '2'
+services:
+  zookeeper1:
+    image: zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      KAFKA_OPTS: '-Djava.security.auth.login.config=/etc/kafka/server-jaas.conf -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider'
+
+  zookeeper2:
+    image: zookeeper:latest
+    ports:
+      - "2281:2181"
+    environment:
+      KAFKA_OPTS: '-Djava.security.auth.login.config=/etc/kafka/server-jaas.conf -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider'
+
+  zookeeper3:
+    image: zookeeper:latest
+    ports:
+      - "2381:2181"
+    environment:
+      KAFKA_OPTS: '-Djava.security.auth.login.config=/etc/kafka/server-jaas.conf -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider'
+
+  kafka1:
+    image: bitnami/kafka:3.4.1
+    ports:
+      - "9092:9092"
+    links:
+      - zookeeper1
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 172.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_CREATE_TOPICS: "health"
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2181
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9092,PLAINTEXT_HOST://localhost:39092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  kafka2:
+    image: bitnami/kafka:3.4.1
+    ports:
+      - "9192:9092"
+    links:
+      - zookeeper2
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 172.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2281
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_CREATE_TOPICS: "health"
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2281
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  kafka3:
+    image: bitnami/kafka:3.4.1
+    ports:
+      - "9292:9092"
+    links:
+      - zookeeper3
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 172.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2381
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: 'true'
+      KAFKA_CREATE_TOPICS: "health"
+      KAFKA_CFG_ZOOKEEPER_CONNECT: zookeeper:2381
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  # kafka-exporter1:
+  #   image: bitnami/kafka-exporter:latest
+  #   ports:
+  #     - "9308:9308"
+  #   command:
+  #     - --kafka.server=172.0.0.1:9092
+  #   links:
+  #     - kafka1
